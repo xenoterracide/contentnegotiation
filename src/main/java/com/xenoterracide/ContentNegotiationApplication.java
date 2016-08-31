@@ -2,7 +2,10 @@ package com.xenoterracide;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +37,16 @@ public class ContentNegotiationApplication {
 
         public void setName( String name ) {
             this.name = name;
+        }
+    }
+
+
+    @Configuration /// class is completely optional to the problem
+    static class SecConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure( HttpSecurity http ) throws Exception {
+            http.authorizeRequests().mvcMatchers( "/mypath" ).denyAll()
+                    .and().csrf().disable();
         }
     }
 
